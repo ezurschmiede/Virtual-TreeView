@@ -71,10 +71,13 @@ procedure ReleaseThreadReference(Tree: TBaseVirtualTree);
 begin
   if Assigned(WorkerThread) then
   begin
-    Dec(WorkerThread.FRefCount);
+    //Dec(WorkerThread.FRefCount); // EZ
 
     // Make sure there is no reference remaining to the releasing tree.
     TBaseVirtualTreeCracker(Tree).InterruptValidation;
+
+    // EZ: moved to here because sometimes there is a access to a freed object - eg if Tree.InterruptValidation takes much time and waits in its own message loop and a other tree is runing into this here
+    Dec(WorkerThread.FRefCount);
 
     if WorkerThread.FRefCount = 0 then
     begin

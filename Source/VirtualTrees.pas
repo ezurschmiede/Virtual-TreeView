@@ -16386,6 +16386,7 @@ begin
     Include(LeaveStates, tsValidationNeeded);
 
   DoStateChange(EnterStates, LeaveStates);
+  Message.Result := 1; // EZ
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -24672,13 +24673,14 @@ begin
     if not AddOnly then
       InternalClearSelection;
 
-    while NodeFrom <> NodeTo do
+    while (NodeFrom <> nil) and (NodeFrom <> NodeTo) do  // EZ - 28.2.2006: added (NodeFrom <> nil) because of memory exception and potential endlees loop
     begin
       InternalCacheNode(NodeFrom);
       NodeFrom := GetNextVisible(NodeFrom, True);
     end;
     // select last node too
-    InternalCacheNode(NodeFrom);
+    if NodeFrom <> nil then // EZ - 28.2.2006: added (NodeFrom <> nil) because of memory exception and potential endlees loop
+      InternalCacheNode(NodeFrom);
     // now add them all in "one" step
     AddToSelection(FTempNodeCache, FTempNodeCount);
     ClearTempCache;
@@ -25960,6 +25962,7 @@ begin
       FLastChangedNode := nil;
       FRangeAnchor := nil;
       FCheckNode := nil;
+      FStates := FStates - [tsMouseCheckPending, tsKeyCheckPending]; // EZ: fix a AV-Exception: When the Tree gots cleared widthin a checkoperation then, later by clicking on the Tree a AV ocures because of nil-access to FCheckNode
       FLastVCLDragTarget := nil;
       FLastSearchNode := nil;
       DeleteChildren(FRoot, True);
