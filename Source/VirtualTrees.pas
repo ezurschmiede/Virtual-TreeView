@@ -3306,7 +3306,8 @@ type
     procedure GetDataFromGrid(const AStrings : TStringList; const IncludeHeading : Boolean = True);
   protected
     FPreviouslySelected: TStringList;
-    procedure InitializeTextProperties(var PaintInfo: TVTPaintInfo); // [IPK] - private to protected
+    procedure InitializeTextProperties(var PaintInfo: TVTPaintInfo); virtual; // EZ - make virtual // [IPK] - private to protected
+    property InternalUpdateCount: Cardinal read FUpdateCount write FUpdateCount; // EZ - need access to FUpdateCount in derived components
     procedure PaintNormalText(var PaintInfo: TVTPaintInfo; TextOutFlags: Integer; Text: string); virtual; // [IPK] - private to protected
     procedure PaintStaticText(const PaintInfo: TVTPaintInfo; TextOutFlags: Integer; const Text: string); virtual; // [IPK] - private to protected
     procedure AdjustPaintCellRect(var PaintInfo: TVTPaintInfo; var NextNonEmpty: TColumnIndex); override;
