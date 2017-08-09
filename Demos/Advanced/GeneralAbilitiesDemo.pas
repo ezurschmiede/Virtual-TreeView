@@ -32,36 +32,35 @@ uses
 type
   TGeneralForm = class(TForm)
     VST2: TVirtualStringTree;
-    CheckMarkCombo: TComboBox;
-    Label18: TLabel;
-    MainColumnUpDown: TUpDown;
-    Label19: TLabel;
-    BitBtn1: TBitBtn;
-    Label8: TLabel;
     TreeImages: TImageList;
     FontDialog1: TFontDialog;
     PopupMenu1: TPopupMenu;
     Onemenuitem1: TMenuItem;
     forrightclickselection1: TMenuItem;
     withpopupmenu1: TMenuItem;
-    RadioGroup1: TRadioGroup;
-    RadioGroup2: TRadioGroup;
     VTHPopup: TVTHeaderPopupMenu;
-    ThemeRadioGroup: TRadioGroup;
-    SaveButton: TBitBtn;
     SaveDialog: TSaveDialog;
     ImageList1: TImageList;
+    Panel1: TPanel;
+    Label8: TLabel;
+    BitBtn1: TBitBtn;
+    RadioGroup1: TRadioGroup;
+    RadioGroup2: TRadioGroup;
+    ThemeRadioGroup: TRadioGroup;
+    SaveButton: TBitBtn;
+    GroupBox1: TGroupBox;
+    Label19: TLabel;
+    MainColumnUpDown: TUpDown;
     procedure BitBtn1Click(Sender: TObject);
     procedure VST2InitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
       var InitialStates: TVirtualNodeInitStates);
     procedure VST2InitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
-    procedure VST2NewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; Text: UnicodeString);
+    procedure VST2NewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: string);
     procedure VST2GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var CellText: UnicodeString);
+      var CellText: string);
     procedure VST2PaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
       TextType: TVSTTextType);
     procedure VST2GetNodeDataSize(Sender: TBaseVirtualTree; var NodeDataSize: Integer);
-    procedure CheckMarkComboChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure MainColumnUpDownChanging(Sender: TObject; var AllowChange: Boolean);
     procedure VST2GetPopupMenu(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; const P: TPoint;
@@ -82,6 +81,7 @@ type
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: TImageIndex;
       var ImageList: TCustomImageList);
+    procedure VST2FreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   end;
 
 var
@@ -119,17 +119,10 @@ var
   I: Integer;
 
 begin
-  // We assign these handlers manually to keep the demo source code compatible
-  // with older Delphi versions after using UnicodeString instead of WideString.
-  VST2.OnGetText := VST2GetText;
-  VST2.OnNewText := VST2NewText;
-
   // Determine if we are running on Windows XP or higher.
   ThemeRadioGroup.Enabled := CheckWin32Version(5, 1);
   if ThemeRadioGroup.Enabled then
     ThemeRadioGroup.ItemIndex := 0;
-
-  CheckMarkCombo.ItemIndex := 3;
 
   // Add a second line of hint text for column headers (not possible in the object inspector).
   with VST2.Header do
@@ -190,7 +183,7 @@ end;
 //----------------------------------------------------------------------------------------------------------------------
 
 procedure TGeneralForm.VST2GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType; var CellText: UnicodeString);
+  TextType: TVSTTextType; var CellText: string);
 
 // Returns the text as it is stored in the nodes data record.
 
@@ -337,7 +330,7 @@ end;
 //----------------------------------------------------------------------------------------------------------------------
 
 procedure TGeneralForm.VST2NewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-  Text: UnicodeString);
+  NewText: string);
 
 // The caption of a node has been changed, keep this in the node record.
 
@@ -346,7 +339,7 @@ var
 
 begin
   Data := Sender.GetNodeData(Node);
-  Data.Caption := Text;
+  Data.Caption := NewText;
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -360,14 +353,6 @@ begin
     if Execute then
       VST2.Font := Font;
   end;
-end;
-
-//----------------------------------------------------------------------------------------------------------------------
-
-procedure TGeneralForm.CheckMarkComboChange(Sender: TObject);
-
-begin
-  VST2.CheckImageKind := TCheckImageKind(CheckMarkCombo.ItemIndex);
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -474,8 +459,6 @@ begin
 
   RadioGroup1.Enabled := ThemeRadioGroup.ItemIndex = 1;
   RadioGroup2.Enabled := ThemeRadioGroup.ItemIndex = 1;
-  Label18.Enabled := ThemeRadioGroup.ItemIndex = 1;
-  CheckMarkCombo.Enabled := ThemeRadioGroup.ItemIndex = 1;
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -571,5 +554,15 @@ begin
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
+
+procedure TGeneralForm.VST2FreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  Data: PNodeData2;
+
+begin
+  Data := Sender.GetNodeData(Node);
+  Finalize(data^);
+end;
 
 end.

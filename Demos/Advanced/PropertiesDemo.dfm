@@ -1,8 +1,8 @@
 object PropertiesForm: TPropertiesForm
   Left = 397
   Top = 294
-  Width = 637
-  Height = 421
+  ClientHeight = 382
+  ClientWidth = 621
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,7 +13,7 @@ object PropertiesForm: TPropertiesForm
   OnCreate = FormCreate
   DesignSize = (
     621
-    383)
+    382)
   PixelsPerInch = 96
   TextHeight = 16
   object Label9: TLabel
@@ -75,8 +75,12 @@ object PropertiesForm: TPropertiesForm
     OnChange = VST3Change
     OnCreateEditor = VST3CreateEditor
     OnEditing = VST3Editing
+    OnFreeNode = VST3FreeNode
+    OnGetText = VST3GetText
     OnPaintText = VST3PaintText
     OnGetImageIndex = VST3GetImageIndex
+    OnGetHint = VST3GetHint
+    OnIncrementalSearch = VST3IncrementalSearch
     OnInitChildren = VST3InitChildren
     OnInitNode = VST3InitNode
     OnStateChange = VST3StateChange
@@ -112,7 +116,7 @@ object PropertiesForm: TPropertiesForm
     Left = 422
     Top = 224
     Bitmap = {
-      494C010112001300040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101120013000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

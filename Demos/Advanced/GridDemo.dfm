@@ -1,8 +1,8 @@
 object GridForm: TGridForm
   Left = 536
   Top = 333
-  Width = 761
-  Height = 438
+  ClientHeight = 474
+  ClientWidth = 745
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -10,10 +10,9 @@ object GridForm: TGridForm
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  OnCreate = FormCreate
   DesignSize = (
     745
-    400)
+    474)
   PixelsPerInch = 96
   TextHeight = 16
   object Label15: TLabel
@@ -35,7 +34,7 @@ object GridForm: TGridForm
     Left = 518
     Top = 168
     Width = 195
-    Height = 109
+    Height = 57
     Anchors = [akTop, akRight]
     AutoSize = False
     Caption = 
@@ -44,11 +43,24 @@ object GridForm: TGridForm
     Transparent = True
     WordWrap = True
   end
+  object Label2: TLabel
+    Left = 518
+    Top = 248
+    Width = 195
+    Height = 73
+    Anchors = [akTop, akRight]
+    AutoSize = False
+    Caption = 
+      'AUTO SPAN: Use the following option to see Auto Span in action w' +
+      'here a long First Name extends into the Last Name column.'
+    Transparent = True
+    WordWrap = True
+  end
   object VST5: TVirtualStringTree
     Left = 6
     Top = 6
     Width = 491
-    Height = 354
+    Height = 428
     Anchors = [akLeft, akTop, akRight, akBottom]
     BevelInner = bvNone
     BevelOuter = bvRaised
@@ -85,6 +97,7 @@ object GridForm: TGridForm
     HintMode = hmTooltip
     ParentFont = False
     ParentShowHint = False
+    PopupMenu = PopupMenu
     RootNodeCount = 100
     ScrollBarOptions.AlwaysVisible = True
     ShowHint = True
@@ -100,6 +113,7 @@ object GridForm: TGridForm
     OnCreateEditor = VST5CreateEditor
     OnFocusChanging = VST5FocusChanging
     OnFreeNode = VST5FreeNode
+    OnGetText = VST5GetText
     OnPaintText = VST5PaintText
     OnInitNode = VST5InitNode
     OnStateChange = VST5StateChange
@@ -136,8 +150,8 @@ object GridForm: TGridForm
       end>
   end
   object GridLineCheckBox: TCheckBox
-    Left = 522
-    Top = 339
+    Left = 518
+    Top = 392
     Width = 153
     Height = 17
     Anchors = [akRight, akBottom]
@@ -147,11 +161,21 @@ object GridForm: TGridForm
     TabOrder = 1
     OnClick = GridLineCheckBoxClick
   end
+  object AutoSpanCheckBox: TCheckBox
+    Left = 518
+    Top = 327
+    Width = 153
+    Height = 17
+    Anchors = [akTop, akRight]
+    Caption = 'Switch ON Auto Span'
+    TabOrder = 2
+    OnClick = AutoSpanCheckBoxClick
+  end
   object TreeImages: TImageList
     Left = 22
     Top = 36
     Bitmap = {
-      494C010112001300040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010112001300280010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       000000000000000000000000000000000000FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -817,5 +841,13 @@ object GridForm: TGridForm
       E00380078001C001E007807F87E10001E00F80FF80018003E01F81FFC0038007
       FFFFFFFFFC3F240FFFFFFFFFFFFF661F00000000000000000000000000000000
       000000000000}
+  end
+  object PopupMenu: TPopupMenu
+    Left = 83
+    Top = 36
+    object Edit1: TMenuItem
+      Caption = 'Edit'
+      OnClick = Edit1Click
+    end
   end
 end

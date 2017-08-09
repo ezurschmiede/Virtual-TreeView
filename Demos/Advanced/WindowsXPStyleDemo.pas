@@ -38,15 +38,16 @@ type
       var InitialStates: TVirtualNodeInitStates);
     procedure XPTreeInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
     procedure XPTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-      TextType: TVSTTextType; var CellText: UnicodeString);
+      TextType: TVSTTextType; var CellText: string);
     procedure XPTreeHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
     procedure XPTreeCompareNodes(Sender: TBaseVirtualTree; Node1, Node2: PVirtualNode; Column: TColumnIndex;
       var Result: Integer);
     procedure XPTreeGetHint(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-      var LineBreakStyle: TVTTooltipLineBreakStyle; var HintText: UnicodeString);
+      var LineBreakStyle: TVTTooltipLineBreakStyle; var HintText: string);
     procedure Label4Click(Sender: TObject);
     procedure ToolButton9Click(Sender: TObject);
     procedure XPTreeStateChange(Sender: TBaseVirtualTree; Enter, Leave: TVirtualTreeStates);
+    procedure XPTreeFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   end;
 
 var
@@ -119,11 +120,6 @@ end;
 procedure TWindowsXPForm.FormCreate(Sender: TObject);
 
 begin
-  // We assign these handlers manually to keep the demo source code compatible
-  // with older Delphi versions after using UnicodeString instead of WideString.
-  XPTree.OnGetText := XPTreeGetText;
-  XPTree.OnGetHint := XPTreeGetHint;
-
   XPTree.NodeDataSize := SizeOf(TEntry);
 
   ConvertToHighColor(LargeImages);
@@ -163,7 +159,7 @@ end;
 //----------------------------------------------------------------------------------------------------------------------
 
 procedure TWindowsXPForm.XPTreeGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType; var CellText: UnicodeString);
+  TextType: TVSTTextType; var CellText: string);
 
 var
   Data: PEntry;
@@ -244,7 +240,7 @@ end;
 //----------------------------------------------------------------------------------------------------------------------
 
 procedure TWindowsXPForm.XPTreeGetHint(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-  var LineBreakStyle: TVTTooltipLineBreakStyle; var HintText: UnicodeString);
+  var LineBreakStyle: TVTTooltipLineBreakStyle; var HintText: string);
 
 begin
   // Show only a dummy hint. It is just to demonstrate how to do it.
@@ -280,5 +276,15 @@ begin
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
+
+procedure TWindowsXPForm.XPTreeFreeNode(Sender: TBaseVirtualTree;
+  Node: PVirtualNode);
+var
+  Data: PEntry;
+
+begin
+  Data := Sender.GetNodeData(Node);
+  Finalize(Data^);
+end;
 
 end.

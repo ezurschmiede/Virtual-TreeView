@@ -1,10 +1,10 @@
 object MainForm: TMainForm
   Left = 717
   Top = 268
-  Width = 425
-  Height = 481
   BiDiMode = bdLeftToRight
   Caption = 'Simple Virtual Treeview demo'
+  ClientHeight = 443
+  ClientWidth = 409
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,18 +20,23 @@ object MainForm: TMainForm
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 12
-    Top = 12
-    Width = 111
+    Left = 10
+    Top = 280
+    Width = 116
     Height = 13
     Caption = 'Last operation duration:'
   end
   object VST: TVirtualStringTree
+    AlignWithMargins = True
     Left = 8
-    Top = 36
-    Width = 397
-    Height = 301
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Top = 8
+    Width = 393
+    Height = 262
+    Margins.Left = 8
+    Margins.Top = 8
+    Margins.Right = 8
+    Margins.Bottom = 8
+    Align = alTop
     BiDiMode = bdLeftToRight
     Colors.BorderColor = clWindowText
     Colors.HotColor = clBlack
@@ -43,22 +48,24 @@ object MainForm: TMainForm
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.MainColumn = -1
-    Header.Options = [hoColumnResize, hoDrag]
+    Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     HintAnimation = hatNone
     IncrementalSearch = isAll
     ParentBiDiMode = False
-    RootNodeCount = 100
     TabOrder = 0
     TreeOptions.AnimationOptions = [toAnimatedToggle]
-    TreeOptions.AutoOptions = [toAutoDropExpand, toAutoTristateTracking]
     TreeOptions.MiscOptions = [toEditable, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.PaintOptions = [toShowButtons, toShowRoot, toShowTreeLines, toThemeAware, toUseBlendedImages]
-    TreeOptions.SelectionOptions = [toMultiSelect, toCenterScrollIntoView]
+    TreeOptions.SelectionOptions = [toMultiSelect]
     OnFreeNode = VSTFreeNode
+    OnGetText = VSTGetText
     OnInitNode = VSTInitNode
-    OnStartDrag = VSTStartDrag
-    Columns = <>
+    Columns = <
+      item
+        Position = 0
+        Width = 300
+        WideText = 'Name'
+      end>
   end
   object ClearButton: TButton
     Left = 97
@@ -87,7 +94,7 @@ object MainForm: TMainForm
     Height = 21
     Anchors = [akLeft, akBottom]
     TabOrder = 3
-    Text = '1'
+    Text = '3'
   end
   object Button1: TButton
     Tag = 1
