@@ -4246,26 +4246,32 @@ const
   MaskColor: TColor = clRed;
 
 var
-  BM: TBitmap;
+  BM, B: TBitmap;
 
   //--------------- local functions -------------------------------------------
 
   procedure AddNodeImages(IL: TImageList);
-
   var
     I: Integer;
-    OffsetX,
-    OffsetY: Integer;
-
+    B: TBitMap;
   begin
-    // The offsets are used to center the node images in case the sizes differ.
-    OffsetX := (IL.Width - NodeImages.Width) div 2;
-    OffsetY := (IL.Height - NodeImages.Height) div 2;
     for I := 0 to 3 do
     begin
-      BM.Canvas.FillRect(Rect(0, 0, BM.Width, BM.Height));
-      NodeImages.Draw(BM.Canvas, OffsetX, OffsetY, I);
-      IL.AddMasked(BM, MaskColor);
+      B := TBitMap.Create;
+      try
+        B.Canvas.Brush.Color := MaskColor;
+        B.Canvas.Brush.Style := bsSolid;
+        B.SetSize(NodeImages.Width, NodeImages.Height);
+        B.Canvas.FillRect(Rect(0, 0, B.Width, B.Height));
+        NodeImages.Draw(B.Canvas, 0, 0, I);
+
+        BM.Canvas.FillRect(Rect(0, 0, BM.Width, BM.Height));
+        BM.Canvas.StretchDraw(Rect(0, 0, BM.Width, BM.Height), B);
+
+        IL.AddMasked(BM, MaskColor);
+      finally
+        B.Free;
+      end;
     end;
   end;
 
