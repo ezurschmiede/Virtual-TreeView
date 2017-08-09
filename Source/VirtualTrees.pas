@@ -22152,7 +22152,7 @@ begin
   Index := -1;
   Ghosted := False;
   lImageList := DoGetImageIndex(Node, Kind, Column, Ghosted, Index);
-  if Index >= 0 then begin
+  if (Index >= 0) and Assigned(lImageList) then begin // EZ - fix AV
     if IncludePadding then
       Result.cx := lImageList.Width + ScaledPixels(2)
     else
