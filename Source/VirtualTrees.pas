@@ -20485,7 +20485,10 @@ begin
     if Assigned(FOnGetImage) then
       FOnGetImage(Self, Node, Kind, Column, Ghosted, Index);
   end;
-  Assert((Index < 0) or Assigned(Result), 'An image index was supplied for TVTImageKind.' + cTVTImageKind2String[Kind] + ' but no image list was supplied.');
+
+  //Assert((Index < 0) or Assigned(Result), 'An image index was supplied for TVTImageKind.' + cTVTImageKind2String[Kind] + ' but no image list was supplied.');
+  if not Assigned(Result) then // EZ - just fix it and don't use a Assertion
+    Index := -1;
 end;
 
 //----------------------------------------------------------------------------------------------------------------------
